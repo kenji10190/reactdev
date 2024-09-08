@@ -8,7 +8,7 @@ const scores = {
 
 export function minimax(board, depth, isMaximizing){
   let haveWinner = calculateWinner(board);
-  if (haveWinner) return scores[haveWinner];
+  if (haveWinner) return scores[haveWinner.winner];
   else if (!board.includes(null)) return scores["tie"];
 
   let bestMove = null;
