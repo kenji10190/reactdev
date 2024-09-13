@@ -65,7 +65,7 @@ export default function Game(){
   }
 
   function AIMove(squares){
-    let xMove = minimax(squares, 0, true);
+    let xMove = minimax(squares, 0, -Infinity, +Infinity, true);
     const xSquares = squares.slice();
     xSquares[xMove] = "X";
     handlePlay(xSquares);
