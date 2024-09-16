@@ -8,7 +8,10 @@ const scores = {
 
 export function minimax(board, depth, alpha, beta, isMaximizing){
   let haveWinner = calculateWinner(board);
-  if (haveWinner) return scores[haveWinner.winner];
+  if (haveWinner){
+    if (haveWinner.winner === "X") return scores[haveWinner.winner] - depth;
+    else return scores[haveWinner.winner] + depth;
+  }
   else if (!board.includes(null)) return scores["tie"];
 
   let bestMove = null;
@@ -25,7 +28,7 @@ export function minimax(board, depth, alpha, beta, isMaximizing){
           if (depth === 0) bestMove = i;
         }
 
-        alpha = Math.max(score, alpha);
+        alpha = Math.max(bestScore, alpha);
         if (beta <= alpha) break;
       }
     }
@@ -39,7 +42,7 @@ export function minimax(board, depth, alpha, beta, isMaximizing){
         board[i] = null;
         if (score < bestScore) bestScore = score;
         
-        beta = Math.min(score, beta);
+        beta = Math.min(bestScore, beta);
         if (beta <= alpha) break;
       }
     }

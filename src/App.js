@@ -8,7 +8,7 @@ function Square({value, onSquareClick, highlight}){
 }
 
 // Boardコンポーネント
-function Board({xIsNext, squares, onPlay, ai}) {
+function Board({xIsNext, squares, onPlay}) {
   
   const result = calculateWinner(squares);
   const winner = result ? result.winner : null;
@@ -22,7 +22,6 @@ function Board({xIsNext, squares, onPlay, ai}) {
 
     onPlay(nextSquares);
     if (!nextSquares.includes(null)) return;
-    ai(nextSquares);
   }
 
   if (winner) status = "勝者は " + winner + "です!";
@@ -62,13 +61,20 @@ export default function Game(){
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
+
+    if (!calculateWinner(nextSquares) && nextSquares.includes(null)){
+      AIMove(nextSquares);
+    }
   }
 
   function AIMove(squares){
     let xMove = minimax(squares, 0, -Infinity, +Infinity, true);
     const xSquares = squares.slice();
     xSquares[xMove] = "X";
-    handlePlay(xSquares);
+    
+    const nextHistory = [...history.slice(0, currentMove + 1), xSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
   }
 
   function jumpTo(nextMove){
@@ -89,7 +95,7 @@ export default function Game(){
   return (
     <div className="game">
       <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} ai={AIMove} />
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
       </div>
       <div className="game-info">
         <ol>{moves}</ol>
